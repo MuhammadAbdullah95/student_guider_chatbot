@@ -1,9 +1,10 @@
 import os
 from typing import List, Dict
-
+from instructions import instruct
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
+from tools.google_search import search_tool
 from pydantic import BaseModel, Field
 from fastapi.responses import Response
 
@@ -36,6 +37,8 @@ model = OpenAIChatCompletionsModel(
 config = RunConfig(model=model, model_provider=external_client, tracing_disabled=True)
 set_tracing_disabled(True)
 
+
+
 @function_tool
 def get_answer(query: str):
     query_response = client.models.embed_content(
@@ -55,8 +58,8 @@ def get_answer(query: str):
 
 agent = Agent(
     name="Student Guide",
-    instructions="You are a helpful assistant. If the user asks a question, use your tools to find information in the knowledge base and answer with that information.",
-    tools=[get_answer],
+    instructions=instruct,
+    tools=[get_answer, search_tool],
 )
 
 # --- In-memory session store (for demo only!) ---

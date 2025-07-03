@@ -48,10 +48,10 @@ if submitted and user_input.strip():
         bot_reply = f"Error: {e}"
     # Add bot reply to history
     st.session_state.chat_history.append({"role": "assistant", "content": bot_reply})
-    st.experimental_rerun()
+    st.rerun()
 
 # Option to reset chat
 if st.button("Reset Chat"):
     st.session_state.chat_history = []
     st.session_state.session_id = str(uuid.uuid4())
-    st.experimental_rerun() 
+    st.rerun() 
